@@ -17,10 +17,11 @@ Basic authentication requires validating token generated using AWS Cognito. The 
 - `unauthorizedAttributes` - (optional) if set, passed directly to [Boom.unauthorized](https://github.com/hapijs/boom#boomunauthorizedmessage-scheme-attributes) if no custom `err` is thrown. Useful for setting realm attribute in WWW-Authenticate header. Defaults to `undefined`.
 
 ```javascript
-const Bcrypt = require('bcrypt');
 const Hapi = require('hapi');
 const JwtDecode = require('jwt-decode');
+const Boom = require('boom');
 
+internals.clientList = ['xxxxx1','uuuu2'];
 
 const validate = async (request, basicToken, h) => {
 
