@@ -1,0 +1,39 @@
+{
+  "name": "hapi-oauth2-awscognito",
+  "description": "Basic OAuth2 Auth Scheme plugin",
+  "version": "1.0.0",
+  "repository": "git://github.com/sachin-rajput/hapi-oauth2-scheme",
+  "main": "lib/index.js",
+  "author": {
+    "name": "Sachin Rajput",
+    "email": "sachin.rajput@dowjones.com",
+    "url": "https://github.com/sachin.rajput"
+  },
+  "keywords": [
+    "hapi",
+    "plugin",
+    "auth",
+    "basic"
+  ],
+  "engines": {
+    "node": ">=8.9.0"
+  },
+  "dependencies": {
+    "boom": "7.x.x",
+    "hoek": "5.x.x",
+    "jwt-decode": "^2.2.0"
+  },
+  "peerDependencies": {
+    "hapi": ">=17.x.x"
+  },
+  "devDependencies": {
+    "code": "5.x.x",
+    "hapi": "18.x.x",
+    "lab": "15.x.x"
+  },
+  "scripts": {
+    "test": "lab -a code -t 70 -L",
+    "test-cov-html": "lab -a code -r html -o coverage.html"
+  },
+  "license": "BSD-3-Clause"
+}
