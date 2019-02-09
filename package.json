@@ -1,7 +1,7 @@
 {
   "name": "hapi-oauth2-awscognito",
   "description": "Basic OAuth2 Auth Scheme plugin",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "repository": "git://github.com/sachin-rajput/hapi-oauth2-scheme",
   "main": "lib/index.js",
   "author": {

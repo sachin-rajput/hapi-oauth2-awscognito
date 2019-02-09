@@ -21,6 +21,8 @@ const Hapi = require('hapi');
 const JwtDecode = require('jwt-decode');
 const Boom = require('boom');
 
+let internals = {};
+
 internals.clientList = ['xxxxx1','uuuu2'];
 
 const validate = async (request, basicToken, h) => {
