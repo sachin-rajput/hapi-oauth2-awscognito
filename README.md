@@ -27,7 +27,13 @@ internals.clientList = ['xxxxx1','uuuu2'];
 
 const validate = async (request, basicToken, h) => {
 
-    const decodedClaims = JwtDecode(basicToken);
+    let decodedClaims;
+    try {
+        decodedClaims = JwtDecode(basicToken);
+    }
+    catch (err) {
+        throw Boom.badRequest('Bad Authorization token', 'Basic');
+    }
 
     if (decodedClaims) {
         const found = internals.clientList.includes(decodedClaims.client_id);
