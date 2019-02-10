@@ -2,11 +2,11 @@
 
 Lead Maintainer: [Sachin Rajput](https://github.com/sachin.rajput)
 
-Basic authentication requires validating token generated using AWS Cognito. The `'basic'` scheme takes the following options:
+Bearer authentication requires validating token generated using AWS Cognito. The `'bearer'` scheme takes the following options:
 
-- `validate` - (required) a oauth/token endpoint token with the signature `[async] function(request, basicToken, h)` where:
+- `validate` - (required) a oauth/token endpoint token with the signature `[async] function(request, bearerToken, h)` where:
     - `request` - is the hapi request object of the request which is being authenticated.
-    - `basicToken` - the token received from oauth/token endpoint from the client.
+    - `bearerToken` - the token received from oauth/token endpoint from the client.
     - `h` - the response toolkit.
     - Returns an object `{ isValid, credentials, response }` where:
         - `isValid` - `true` if both the username was found and the password matched, otherwise `false`.
@@ -25,14 +25,14 @@ let internals = {};
 
 internals.clientList = ['xxxxx1','uuuu2'];
 
-const validate = async (request, basicToken, h) => {
+const validate = async (request, bearerToken, h) => {
 
     let decodedClaims;
     try {
-        decodedClaims = JwtDecode(basicToken);
+        decodedClaims = JwtDecode(bearerToken);
     }
     catch (err) {
-        throw Boom.badRequest('Bad Authorization token', 'Basic');
+        throw Boom.badRequest('Bad Authorization token', 'Bearer');
     }
 
     if (decodedClaims) {
@@ -48,12 +48,12 @@ const validate = async (request, basicToken, h) => {
                     }
                 });
             }
-            throw Boom.unauthorized('Token Expired', 'Basic');
+            throw Boom.unauthorized('Token Expired', 'Bearer');
         }
-        throw Boom.unauthorized('Invalid Client', 'Basic');
+        throw Boom.unauthorized('Invalid Client', 'Bearer');
     }
 
-    throw Boom.badRequest('Bad Authorization token', 'Basic');
+    throw Boom.badRequest('Bad Authorization token', 'Bearer');
 };
 
 const main = async () => {
