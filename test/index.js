@@ -21,7 +21,7 @@ const it = lab.it;
 const expect = Code.expect;
 
 
-it('returns a reply on successful auth', async () => {
+it('returns a reply on successful auth using header', async () => {
 
     const server = Hapi.server();
     await server.register(require('../'));
@@ -47,6 +47,64 @@ it('returns a reply on successful auth', async () => {
 
     expect(res.result).to.equal('ok');
 });
+
+it('returns a reply on successful auth using query', async () => {
+
+    const server = Hapi.server();
+    await server.register(require('../'));
+
+    server.auth.strategy('default', 'oauth2Token', {
+        validate: internals.clients
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/',
+        handler: function (request, h) {
+
+            return 'ok';
+        },
+        options: {
+            auth: 'default'
+        }
+    });
+
+    const request = { method: 'GET', url: '/?access_token=' + internals.token(testClient.clientId, testClient.clientSecret), headers: { } };
+    const res = await server.inject(request);
+
+    expect(res.result).to.equal('ok');
+});
+
+// it('returns a reply on successful auth using payload', async () => {
+
+//     const server = Hapi.server();
+//     await server.register(require('../'));
+
+//     server.auth.strategy('default', 'oauth2Token', {
+//         validate: internals.clients
+//     });
+
+//     server.route({
+//         method: 'POST',
+//         path: '/',
+//         handler: function (request, h) {
+
+//             return 'ok';
+//         },
+//         options: {
+//             auth: 'default',
+//             payload: {
+//                 output: 'data',
+//                 parse: true
+//             }
+//         }
+//     });
+
+//     const request = { method: 'POST', url: '/', payload: { access_token: internals.token(testClient.clientId, testClient.clientSecret) } };
+//     const res = await server.inject(request);
+
+//     expect(res.result).to.equal('ok');
+// });
 
 it('returns a Bad Authorization token error', async () => {
 
@@ -77,11 +135,11 @@ it('returns a Bad Authorization token error', async () => {
 
 
 const testClient = {
-    clientId: '4uh9ofrtk75k6mk69rlkf0igk3',
-    clientSecret: 'oun5pf2ld0rflkr4bbllrakvbcph4ehlejdcc13mombv9md0d62'
+    clientId: '67nqujeju3fuie0clrpo1ma8bt',
+    clientSecret: '1eub5hraovq3ku8nbt65e10hrkb9vouhdt8bn9fa7d977v8df5qi'
 };
 
-internals.clientList = ['4uh9ofrtk75k6mk69rlkf0igk3','67eupcvug7l2eb9s2p5c0520lo'];
+internals.clientList = ['67nqujeju3fuie0clrpo1ma8bt'];
 
 internals.inValidHeader = function (clientId, clientSecret) {
 
@@ -91,7 +149,12 @@ internals.inValidHeader = function (clientId, clientSecret) {
 
 internals.header = function () {
 
-    return 'Bearer eyJraWQiOiJLSGtjZHZBRVIyRzVsUTlya2lMTkJlNGFMVzhZSlpZU2ZTYmZBODdSZ2t3PSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiI0dWg5b2ZydGs3NWs2bWs2OXJsa2YwaWdrMyIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoibWFuYWdlY3JlZGl0Y2FyZFwvYWxsIiwiYXV0aF90aW1lIjoxNTQ5NzU2MzQyLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAudXMtZWFzdC0xLmFtYXpvbmF3cy5jb21cL3VzLWVhc3QtMV9QWXhKZUZROGgiLCJleHAiOjE1NDk3NTk5NDIsImlhdCI6MTU0OTc1NjM0MiwidmVyc2lvbiI6MiwianRpIjoiZDlkOTMzNTUtYzVjMS00ODMyLTg2ZmYtMmY0NjJhYzA5MTc1IiwiY2xpZW50X2lkIjoiNHVoOW9mcnRrNzVrNm1rNjlybGtmMGlnazMifQ.kF3rHUniEDBYgoD22xFKsiKO-GIr7stF2M6o81EPIahDtpBCk9SZuAuj-Kf7U0WY0KJ7QoJE-q_Bk6B0p0azKdkcX4TjajPgaPjrLJlJWnzrQ2MKUvyzzyL0tR0KaCeOGF864JI2k_402MlbQpo5MfWS7wQFeRMGSdEYxQ64spumghF0aKIbOaZe_8yrfSLQmoYyPnZQioiWWo6yEaUu2V0y2XRy6ycafcppZNNCwee4eN2C31u1YeeMFUnnJjELnuRtkD6pFL7y2lbABrdn6Qo0mbIjSvaYYOZnLDIqGRwp0Dt7q34-NVI--80Pz_8JUMfDKM4C7f6QUbv6T6CAMA';
+    return 'Bearer eyJraWQiOiJoWnYwczdPXC96amdteEhNTldHb0tROURWOFNEazlZd1ZGYTg2RzlBdUgxMD0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiI2N25xdWplanUzZnVpZTBjbHJwbzFtYThidCIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoibWFuYWdlY3JlZGl0Y2FyZFwvYWxsIiwiYXV0aF90aW1lIjoxNTQ5NzYwMjc5LCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAudXMtZWFzdC0xLmFtYXpvbmF3cy5jb21cL3VzLWVhc3QtMV9WRFZJMFNLWWIiLCJleHAiOjE1NDk3NjM4NzksImlhdCI6MTU0OTc2MDI3OSwidmVyc2lvbiI6MiwianRpIjoiY2ZjYjQyYjQtZjkyYS00OWRhLTk1OTEtMzUyNjAyY2I0YTY2IiwiY2xpZW50X2lkIjoiNjducXVqZWp1M2Z1aWUwY2xycG8xbWE4YnQifQ.AiNDFaJT4_2CKrlhi0AbxFnqUMKpmibYN9kXfjQ6Z6RuZ160vxMlaCNC17XTb33q1RY1nTfSaTaNPKwLEjVWguM2IYEovKfjPmSuybLviWwXX6EMppDXqqe1DJO2AXok9D72RZD8poHShae1FUivGdQ-OyryFRYD8xGfIbots2T9GobzNRoGwxyv7W8s8i7yCh-b5sA8p0urz3A_PNsJxstFY0BjomFnGqZOdOXXmwB1hq8KSbv5n95C7UUvOIIAC9txkGzd040MSl9oxz7ZDhOlbwHG-py8MNGvBNPnLQQ4OHUCuvyWMetZdl7XB-eo4DQ4mMt24J5d_Le3k5Aj3A';
+};
+
+internals.token = function () {
+
+    return 'eyJraWQiOiJoWnYwczdPXC96amdteEhNTldHb0tROURWOFNEazlZd1ZGYTg2RzlBdUgxMD0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiI2N25xdWplanUzZnVpZTBjbHJwbzFtYThidCIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoibWFuYWdlY3JlZGl0Y2FyZFwvYWxsIiwiYXV0aF90aW1lIjoxNTQ5NzYwMjc5LCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAudXMtZWFzdC0xLmFtYXpvbmF3cy5jb21cL3VzLWVhc3QtMV9WRFZJMFNLWWIiLCJleHAiOjE1NDk3NjM4NzksImlhdCI6MTU0OTc2MDI3OSwidmVyc2lvbiI6MiwianRpIjoiY2ZjYjQyYjQtZjkyYS00OWRhLTk1OTEtMzUyNjAyY2I0YTY2IiwiY2xpZW50X2lkIjoiNjducXVqZWp1M2Z1aWUwY2xycG8xbWE4YnQifQ.AiNDFaJT4_2CKrlhi0AbxFnqUMKpmibYN9kXfjQ6Z6RuZ160vxMlaCNC17XTb33q1RY1nTfSaTaNPKwLEjVWguM2IYEovKfjPmSuybLviWwXX6EMppDXqqe1DJO2AXok9D72RZD8poHShae1FUivGdQ-OyryFRYD8xGfIbots2T9GobzNRoGwxyv7W8s8i7yCh-b5sA8p0urz3A_PNsJxstFY0BjomFnGqZOdOXXmwB1hq8KSbv5n95C7UUvOIIAC9txkGzd040MSl9oxz7ZDhOlbwHG-py8MNGvBNPnLQQ4OHUCuvyWMetZdl7XB-eo4DQ4mMt24J5d_Le3k5Aj3A';
 };
 
 internals.clients = async function (request, basicToken, h) {
@@ -109,7 +172,7 @@ internals.clients = async function (request, basicToken, h) {
 
         if (found) {
             if ((decodedClaims.exp * 1000) >= new Date().getTime()) {
-                console.log(decodedClaims);
+                // console.log(decodedClaims);
                 return await Promise.resolve({
                     isValid: true,
                     credentials: {

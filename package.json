@@ -1,7 +1,7 @@
 {
   "name": "hapi-oauth2-awscognito",
   "description": "Bearer OAuth2 Auth Scheme plugin",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "repository": "git://github.com/sachin-rajput/hapi-oauth2-scheme",
   "main": "lib/index.js",
   "author": {
@@ -28,11 +28,11 @@
   },
   "devDependencies": {
     "code": "5.x.x",
-    "hapi": "18.x.x",
+    "hapi": "18.1.0",
     "lab": "15.x.x"
   },
   "scripts": {
-    "test": "lab -a code -t 70 -L",
+    "test": "lab -a code -t 60 -L",
     "test-cov-html": "lab -a code -r html -o coverage.html"
   },
   "license": "BSD-3-Clause"
